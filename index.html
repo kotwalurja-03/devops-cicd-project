@@ -4,48 +4,496 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A beginner DevOps CI/CD portfolio project.">
-  <title>DevOps CI/CD Project</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <meta name="description" content="DevOps CI/CD project demonstrating automated website validation and deployment.">
+  <title>DevOps CI/CD | Automated Deployment</title>
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #151f35;
+      --text: #edf3ff;
+      --muted: #a6b3cc;
+      --green: #78f0c4;
+      --blue: #83aaff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1100px, 90%);
+      margin: auto;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      border-bottom: 1px solid #263149;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .logo span,
+    .highlight {
+      color: var(--green);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--green);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 45px;
+      padding: 90px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 13px;
+      border: 1px solid #326d5b;
+      border-radius: 30px;
+      color: var(--green);
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero p,
+    .section-description {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border: 1px solid #34415b;
+      border-radius: 9px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--green);
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #081a15;
+      border-color: var(--green);
+    }
+
+    .terminal {
+      background: #111a2d;
+      border: 1px solid #2a3650;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px #0004;
+    }
+
+    .terminal-header {
+      padding: 15px;
+      border-bottom: 1px solid #2a3650;
+      color: var(--muted);
+    }
+
+    .terminal-body {
+      padding: 25px;
+      font-family: Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .terminal-body p {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    .success {
+      color: var(--green);
+    }
+
+    .command {
+      color: var(--blue);
+    }
+
+    section {
+      padding: 40px 0;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .section-description {
+      margin-bottom: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 25px;
+      border: 1px solid #29364e;
+      border-radius: 13px;
+      transition: 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #527c8a;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .step {
+      background: var(--card);
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid #29364e;
+    }
+
+    .step-number {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .step h3 {
+      margin: 12px 0 8px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tool {
+      padding: 10px 16px;
+      background: var(--card);
+      border: 1px solid #29364e;
+      border-radius: 9px;
+      color: var(--blue);
+      font-weight: bold;
+    }
+
+    .status {
+      background: #102820;
+      border: 1px solid #28634e;
+      padding: 25px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .status p {
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 25px 0;
+      border-top: 1px solid #263149;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      nav {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="hero">
-    <p class="tag">MY FIRST DEVOPS PROJECT</p>
-    <h1>Automated CI/CD Pipeline</h1>
-    <p class="intro">
-      A simple website built and deployed automatically using GitHub Actions.
-    </p>
-    <a class="button" href="#about">Explore the project</a>
-  </header>
+  <div class="container">
 
-  <main>
-    <section id="about" class="card">
-      <h2>What is this project?</h2>
-      <p>
-        This project demonstrates how Git, GitHub Actions, automated
-        validation, and GitHub Pages work together in a CI/CD workflow.
-      </p>
-    </section>
+    <nav>
+      <a href="#" class="logo">DevOps <span>CI/CD</span></a>
 
-    <section class="card">
-      <h2>Tools I am learning</h2>
-      <ul>
-        <li>Git and GitHub</li>
-        <li>GitHub Actions and YAML</li>
-        <li>HTML, CSS, and JavaScript</li>
-        <li>Continuous integration and deployment</li>
-      </ul>
-    </section>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#tools">Tools</a>
+        <a href="#status">Status</a>
+      </div>
+    </nav>
 
-    <section class="card">
-      <h2>Deployment status</h2>
-      <p id="status">Checking the website...</p>
-    </section>
-  </main>
+    <header class="hero">
+      <div>
+        <span class="tag">● BEGINNER DEVOPS PROJECT</span>
 
-  <footer>
-    <p>Created as a beginner DevOps portfolio project.</p>
-  </footer>
+        <h1>
+          From Code to
+          <span class="highlight">Deployment.</span>
+        </h1>
+
+        <p>
+          A practical DevOps project that automates website validation
+          and deployment using GitHub Actions and GitHub Pages.
+          Every code update can trigger a pipeline that checks the
+          website before publishing it.
+        </p>
+
+        <div class="buttons">
+          <a
+            class="btn btn-primary"
+            href="https://github.com/kotwalurja-03/devops-cicd-project"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View Source Code ↗
+          </a>
+
+          <a
+            class="btn"
+            href="https://github.com/kotwalurja-03/devops-cicd-project/actions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View GitHub Actions
+          </a>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-header">
+          ● ● ● &nbsp; pipeline-output
+        </div>
+
+        <div class="terminal-body">
+          <p><span class="success">$</span> git push origin main</p>
+          <p><span class="command">→</span> Triggering GitHub Actions...</p>
+          <p><span class="success">$</span> python scripts/validate_site.py</p>
+          <p class="success">✓ Website validation</p>
+          <p class="success">✓ Artifact preparation</p>
+          <p class="success">✓ Deployment workflow</p>
+          <p><span class="success">$</span> Pipeline ready_</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="overview">
+        <h2 class="section-title">Project Overview</h2>
+        <p class="section-description">
+          Learning essential DevOps practices through a real project.
+        </p>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-icon">⌘</div>
+            <h3>Version Control</h3>
+            <p>
+              Use Git to track code changes and GitHub to store
+              and manage the project repository.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">✓</div>
+            <h3>Automated Validation</h3>
+            <p>
+              Run a Python validation script through GitHub Actions
+              to check required website files before deployment.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">↗</div>
+            <h3>Continuous Deployment</h3>
+            <p>
+              Automatically publish website changes to GitHub Pages
+              after the validation job succeeds.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="pipeline">
+        <h2 class="section-title">CI/CD Pipeline</h2>
+        <p class="section-description">
+          Four stages take your changes from your computer to the web.
+        </p>
+
+        <div class="pipeline">
+          <article class="step">
+            <span class="step-number">STEP 01</span>
+            <h3>Write Code</h3>
+            <p>Create or update HTML, CSS, JavaScript, and Python files.</p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">STEP 02</span>
+            <h3>Push Changes</h3>
+            <p>Commit your changes and push them to the GitHub repository.</p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">STEP 03</span>
+            <h3>Validate</h3>
+            <p>GitHub Actions runs the automated Python validation script.</p>
+          </article>
+
+          <article class="step">
+            <span class="step-number">STEP 04</span>
+            <h3>Deploy</h3>
+            <p>Publish the website when validation succeeds on the main branch.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="tools">
+        <h2 class="section-title">Tools & Technologies</h2>
+        <p class="section-description">
+          Technologies used in this project.
+        </p>
+
+        <div class="tools">
+          <span class="tool">Git</span>
+          <span class="tool">GitHub</span>
+          <span class="tool">GitHub Actions</span>
+          <span class="tool">Python</span>
+          <span class="tool">YAML</span>
+          <span class="tool">HTML5</span>
+          <span class="tool">CSS3</span>
+          <span class="tool">JavaScript</span>
+          <span class="tool">GitHub Pages</span>
+        </div>
+      </section>
+
+      <section id="status">
+        <div class="status">
+          <div>
+            <h2>Check Pipeline Status</h2>
+            <p>
+              Open GitHub Actions to view the latest validation
+              and deployment results.
+            </p>
+          </div>
+
+          <a
+            class="btn btn-primary"
+            href="https://github.com/kotwalurja-03/devops-cicd-project/actions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Check Latest Run ↗
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built to practise DevOps fundamentals.</p>
+      <p>Code → Validate → Deploy</p>
+    </footer>
+
+  </div>
 </body>
 </html>
