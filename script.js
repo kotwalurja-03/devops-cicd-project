@@ -1,7 +1,16 @@
+```javascript
+document.addEventListener("DOMContentLoaded", () => {
+    const statusElement = document.getElementById("status");
+    const yearElement = document.getElementById("year");
 
-const status = document.getElementById("status");
+    // Display website status
+    if (statusElement) {
+        statusElement.textContent = "Website loaded successfully";
+        statusElement.setAttribute("role", "status");
+    }
 
-if (status) {
-  status.textContent =
-    "Website loaded successfully. Check GitHub Actions for CI/CD results.";
-}
+    // Display the current year in the footer
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+});
