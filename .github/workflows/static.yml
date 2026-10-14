@@ -1,4 +1,4 @@
-
+```yaml
 name: Validate and Deploy Website
 
 on:
@@ -13,8 +13,9 @@ permissions:
 
 jobs:
   validate:
-    name: Validate website
+    name: Validate and Test Website
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,8 +25,11 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Run website validation
+      - name: Validate website
         run: python scripts/validate_site.py
+
+      - name: Run automated tests
+        run: python -m unittest discover -s test -v
 
   deploy:
     name: Deploy website to GitHub Pages
@@ -57,3 +61,4 @@ jobs:
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
+```
