@@ -1,4 +1,4 @@
-```javascript
+
 document.addEventListener("DOMContentLoaded", () => {
     const statusElement = document.getElementById("status");
     const yearElement = document.getElementById("year");
